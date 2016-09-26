@@ -1,7 +1,7 @@
 package ovdm.bus;
 
 public interface ILunchProvisionable {
-    int countItems();
-    int countItems(String type);
+    long countItems();
+    long countItems(String type);
     double moneyAmount();
 }

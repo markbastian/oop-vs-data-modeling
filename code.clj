@@ -1,13 +1,20 @@
-(def bus
-  [{:role :driver :money 4.0}
-   {:role :student
-    :lunch {:type :sack :apples 2 :sandwich 1}}
-   {:role :student
-    :money 4.0}
-   {:role :student
-    :lunch {:type :box :bananas 2 :apples 1 :sandwich 1}
-    :money 5.25}
-   {:role :student :money 10.0}
-   {:role :student
-    :lunch {:type :sack :bananas 1}
-    :money 5.25}])
+;How many bananas are in sack lunches?
+(->> bus
+     (filter (comp #{:sack} :type :lunch))
+     (map #(get-in % [:lunch :bananas] 0))
+     (reduce +))
+
+;How many lunches contain apples?
+(count (filter (comp pos? #(or % 0) :bananas :lunch) bus))
+
+;Does the driver have any money?
+(some
+  (fn [{:keys [role money]}]
+    (and (#{:driver} role) (pos? money)))
+  bus)
+
+;Students with money and food.
+(filter
+  (fn [{:keys [role money lunch]}]
+    (and (= role :student) money lunch))
+  bus)
